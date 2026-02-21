@@ -1,119 +1,69 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: radial-gradient(circle at top, #1a1a1a, #000000 70%);
-    color: white;
-}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Price List</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-/* HEADER */
-.header {
-    text-align: center;
-    padding: 40px 20px 20px;
-}
+<div class="header">
+    <h1>✨ PRODUCT PRICE LIST ✨</h1>
+</div>
 
-.header h1 {
-    color: #00ffff;
-    font-size: 36px;
-    letter-spacing: 3px;
-    text-shadow: 0 0 15px #00ffff;
-}
+<div class="order-form">
+    <input type="text" id="namaPemesan" placeholder="Masukkan Nama Pemesan">
+</div>
 
-/* ORDER FORM */
-.order-form {
-    text-align: center;
-    margin-bottom: 20px;
-}
+<div class="summary">
+    Nama: <span id="displayNama">-</span><br>
+    Total Item: <span id="totalItem">0</span> |
+    Total Harga: B <span id="totalHarga">0</span>
+    <br>
+    <button class="reset-btn" onclick="resetPesanan()">Reset Pesanan</button>
+</div>
 
-.order-form input {
-    width: 250px;
-    padding: 8px;
-    border-radius: 20px;
-    border: 2px solid #00ffff;
-    background: transparent;
-    color: white;
-    text-align: center;
-    outline: none;
-}
+<div class="product-container">
 
-/* SUMMARY */
-.summary {
-    text-align: center;
-    margin: 20px auto;
-    padding: 15px;
-    width: 70%;
-    border: 2px solid #00ffff;
-    border-radius: 15px;
-    box-shadow: 0 0 15px #00ffff;
-    font-size: 18px;
-}
+    <div class="product-card">
+        <img src="https://down-id.img.susercontent.com/file/b2259a1c15492387e14a0ccfac4fae44" alt="Susu Kedelai">
+        <h3>SUSU KEDELAI</h3>
+        <div class="price">B 50 / botol</div>
+        <input type="number" min="1" value="1" class="quantity" id="qty1">
+        <br>
+        <button onclick="tambahPesanan(50,'qty1')">Tambah</button>
+    </div>
 
-/* PRODUCT GRID */
-.product-container {
-    padding: 30px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 25px;
-}
+    <div class="product-card">
+        <img src="https://img06.weeecdn.com/item/image/071/142/33FADE5517F5CB2E.jpeg!c750x0.jpeg" alt="Peach Gum">
+        <h3>PEACH GUM</h3>
+        <div class="price">B 50 / botol</div>
+        <input type="number" min="1" value="1" class="quantity" id="qty2">
+        <br>
+        <button onclick="tambahPesanan(50,'qty2')">Tambah</button>
+    </div>
 
-/* PRODUCT CARD */
-.product-card {
-    background: linear-gradient(145deg, #111, #1c1c1c);
-    border-radius: 20px;
-    padding: 15px;
-    text-align: center;
-    border: 2px solid rgba(0,255,255,0.3);
-    box-shadow: 0 0 15px rgba(0,255,255,0.3);
-    transition: 0.3s;
-}
+    <div class="product-card">
+        <img src="https://i.pinimg.com/736x/72/03/e6/7203e6b32cf67f664055445ed06cee44.jpg" alt="Matcha">
+        <h3>MATCHA</h3>
+        <div class="price">B 50 / botol</div>
+        <input type="number" min="1" value="1" class="quantity" id="qty3">
+        <br>
+        <button onclick="tambahPesanan(50,'qty3')">Tambah</button>
+    </div>
 
-.product-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 0 25px #00ffff;
-}
+    <div class="product-card">
+        <img src="https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/31ab0769-5603-4e27-88eb-36c8f5828edd_cd05a52f-e51f-473c-a1ff-e54bbb79760e_Go-Biz_20200420_184718.jpeg?auto=format" alt="Kopi Koktong">
+        <h3>KOPI KOKTONG</h3>
+        <div class="price">B 50 / botol</div>
+        <input type="number" min="1" value="1" class="quantity" id="qty4">
+        <br>
+        <button onclick="tambahPesanan(50,'qty4')">Tambah</button>
+    </div>
 
-.product-card img {
-    width: 100%;
-    border-radius: 12px;
-    margin-bottom: 15px;
-}
+</div>
 
-.price {
-    color: #00ffff;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-/* QTY */
-.quantity {
-    width: 60px;
-    padding: 5px;
-    border-radius: 5px;
-    border: none;
-    text-align: center;
-}
-
-/* BUTTON */
-button {
-    margin-top: 10px;
-    padding: 8px 15px;
-    border-radius: 20px;
-    border: none;
-    background: #00ffff;
-    color: black;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-button:hover {
-    background: white;
-}
-
-.reset-btn {
-    margin-top: 15px;
-    background: red;
-    color: white;
-}
-
-.reset-btn:hover {
-    background: darkred;
-}
+<script src="script.js"></script>
+</body>
+</html>
