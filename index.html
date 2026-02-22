@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owen Caffe - Menu dengan Qty</title>
+    <title>Owen Caffe - Order Now</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     
@@ -16,33 +16,53 @@
         }
         .header { text-align: center; padding: 30px 20px; }
         .header h1 { font-size: 2.5rem; color: #00ffff; text-shadow: 0 0 10px #00ffff; margin: 0; }
+
+        /* Form Nama & Situs */
         .order-form { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 20px; }
         input[type="text"], select {
             padding: 12px; width: 85%; max-width: 400px; border-radius: 25px;
             border: 2px solid #00ffff; background: rgba(0, 0, 0, 0.7); color: white; 
             text-align: center; outline: none; font-size: 16px;
         }
-        .product-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px 10px; }
+
+        /* Grid Produk */
+        .product-container { 
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px 10px; 
+        }
         .product-card {
             background: rgba(0, 0, 0, 0.8); border: 2px solid #00ffff; border-radius: 15px;
             width: 220px; padding: 15px; text-align: center;
         }
         .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; }
-        .price { font-weight: bold; color: #00ffff; margin: 15px 0 10px 0; font-size: 1.1rem; }
+        .stok-info { font-size: 0.85rem; margin: 10px 0; font-weight: bold; }
+        .tersedia { color: #ffea00; }
+        .habis { color: #ff0000; }
+        .price { font-weight: bold; color: #00ffff; margin: 10px 0; font-size: 1.1rem; }
         
-        /* Gaya Kolom Tambah Pesanan (Qty) */
+        /* Kolom Qty */
         .qty-input {
             width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #00ffff;
             background: white; color: black; text-align: center; box-sizing: border-box; 
             font-size: 16px; margin-bottom: 10px; font-weight: bold;
         }
 
+        button { 
+            background: #00ffff; color: black; border: none; padding: 12px; 
+            border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; 
+            text-transform: uppercase;
+        }
+        button:disabled { background: #555; color: #888; cursor: not-allowed; }
+
+        /* Antrean Pesanan */
         .order-box {
             background: rgba(0, 255, 255, 0.1); border: 2px solid #00ffff;
-            border-radius: 15px; padding: 15px; margin: 20px auto; width: 90%; max-width: 600px; backdrop-filter: blur(10px);
+            border-radius: 15px; padding: 15px; margin: 20px auto; width: 90%; max-width: 800px; 
+            backdrop-filter: blur(10px);
         }
-        button { background: #00ffff; color: black; border: none; padding: 12px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; }
-        .order-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(0, 255, 255, 0.2); }
+        .order-row { 
+            display: flex; justify-content: space-between; padding: 10px 0; 
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2); font-size: 0.9rem;
+        }
         .origin-tag { color: #ffea00; font-size: 11px; font-weight: bold; display: block; }
     </style>
 </head>
@@ -51,9 +71,9 @@
     <div class="header"><h1>✨ OWEN CAFFE ✨</h1></div>
 
     <div class="order-form">
-        <input type="text" id="namaPemesan" placeholder="Ketik Nama Anda..." oninput="pantauPesananSaya()">
-        <select id="SITUS">
-            <option value="" disabled selected>-- SITUS --</option>
+        <input type="text" id="namaPemesan" placeholder="Ketik Nama Anda..." required>
+        <select id="asalPemesan">
+            <option value="" disabled selected>-- Pilih Asal Pesanan --</option>
             <option value="LINETOGEL">LINETOGEL</option><option value="GENGTOTO">GENGTOTO</option>
             <option value="TOGELUP">TOGELUP</option><option value="GOL">GOL</option>
             <option value="DDT">DDT</option><option value="HOMETOGEL">HOMETOGEL</option>
@@ -84,7 +104,7 @@
     <div class="product-container" id="menu-container"></div>
 
     <div class="order-box">
-        <h3 style="text-align:center; color:#00ffff;">👥 ANTREAN PESANAN</h3>
+        <h3 style="text-align:center; color:#00ffff; margin-top:0;">👥 ANTREAN PESANAN TERBARU</h3>
         <div id="listPemesanPublik"></div>
     </div>
 
@@ -101,58 +121,78 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
+        // Ambil Data Produk & Stok
         database.ref('stok_produk/').on('value', (snapshot) => {
             const data = snapshot.val();
             const container = document.getElementById('menu-container');
             container.innerHTML = "";
-            Object.keys(data).forEach((id) => {
-                const item = data[id];
-                container.innerHTML += `
-                    <div class="product-card">
-                        <img src="${item.img}" alt="${item.nama}">
-                        <h3>${item.nama}</h3>
-                        <div class="price">B ${item.harga}</div>
-                        <input type="number" id="qty_${id}" class="qty-input" value="1" min="1">
-                        <button onclick="pesanSekarang('${id}', '${item.nama}', ${item.harga}, ${item.stok})">Tambah</button>
-                    </div>`;
-            });
-        });
-
-        database.ref('pesanan/').limitToLast(10).on('value', (snapshot) => {
-            const data = snapshot.val();
-            const listPublik = document.getElementById('listPemesanPublik');
-            listPublik.innerHTML = data ? "" : "<p>Belum ada pesanan.</p>";
-            if (data) {
-                Object.keys(data).reverse().forEach((key) => {
-                    const p = data[key];
-                    listPublik.innerHTML += `
-                        <div class="order-row">
-                            <div><b>${p.nama}</b><span class="origin-tag">📍 ${p.SITUS}</span></div>
-                            <span>${p.produk} (x${p.jumlah})</span>
+            if(data) {
+                Object.keys(data).forEach((id) => {
+                    const item = data[id];
+                    const isHabis = item.stok <= 0;
+                    container.innerHTML += `
+                        <div class="product-card">
+                            <img src="${item.img}" alt="${item.nama}">
+                            <h3>${item.nama}</h3>
+                            <div class="stok-info ${isHabis ? 'habis' : 'tersedia'}">
+                                ${isHabis ? 'STOK HABIS' : 'Tersedia: ' + item.stok}
+                            </div>
+                            <div class="price">B ${item.harga}</div>
+                            <input type="number" id="qty_${id}" class="qty-input" value="1" min="1" ${isHabis ? 'disabled' : ''}>
+                            <button ${isHabis ? 'disabled' : ''} onclick="pesanSekarang('${id}', '${item.nama}', ${item.harga}, ${item.stok})">
+                                ${isHabis ? 'CLOSE' : 'Tambah'}
+                            </button>
                         </div>`;
                 });
             }
         });
 
+        // Ambil Data Antrean
+        database.ref('pesanan/').limitToLast(10).on('value', (snapshot) => {
+            const data = snapshot.val();
+            const listPublik = document.getElementById('listPemesanPublik');
+            listPublik.innerHTML = data ? "" : "<p style='text-align:center;'>Belum ada pesanan.</p>";
+            if (data) {
+                Object.keys(data).reverse().forEach((key) => {
+                    const p = data[key];
+                    listPublik.innerHTML += `
+                        <div class="order-row">
+                            <div><b>${p.nama}</b><span class="origin-tag">📍 ${p.asal}</span></div>
+                            <div style="text-align:right;">
+                                <span>${p.produk} (x${p.jumlah})</span><br>
+                                <small style="color:#00ffff;">Total: B ${p.totalHarga}</small>
+                            </div>
+                        </div>`;
+                });
+            }
+        });
+
+        // Fungsi Pesan dengan Validasi Wajib Isi
         function pesanSekarang(id, namaProduk, harga, stokTersedia) {
             const nama = document.getElementById('namaPemesan').value.trim();
-            const SITUS = document.getElementById('SITUS').value;
-            const qty = parseInt(document.getElementById('qty_' + id).value); // Mengambil nilai dari kolom qty
+            const asal = document.getElementById('asalPemesan').value;
+            const qty = parseInt(document.getElementById('qty_' + id).value);
             
-            if (!nama || !SITUS) { alert("Isi Nama & Pilih SITUS!"); return; }
-            if (isNaN(qty) || qty < 1) { alert("Jumlah pesanan tidak valid!"); return; }
+            // Validasi Nama & Situs
+            if (!nama) { alert("⚠️ NAMA WAJIB DIISI!"); return; }
+            if (!asal) { alert("⚠️ PILIH ASAL SITUS ANDA!"); return; }
+            if (isNaN(qty) || qty < 1) { alert("⚠️ JUMLAH MINIMAL 1!"); return; }
+            if (qty > stokTersedia) { alert("⚠️ STOK TIDAK CUKUP!"); return; }
             
+            // Update Stok & Kirim Pesanan
             database.ref('stok_produk/' + id).update({ stok: stokTersedia - qty });
             database.ref('pesanan/').push({ 
-                nama: nama, SITUS: SITUS, produk: namaProduk, jumlah: qty, 
-                totalHarga: harga * qty, waktu: new Date().toLocaleTimeString() 
+                nama: nama, 
+                asal: asal, 
+                produk: namaProduk, 
+                jumlah: qty, 
+                totalHarga: harga * qty, 
+                waktu: new Date().toLocaleTimeString() 
             });
             
-            document.getElementById('qty_' + id).value = 1; // Reset kolom ke angka 1
+            alert("Pesanan " + namaProduk + " berhasil ditambahkan!");
+            document.getElementById('qty_' + id).value = 1; 
         }
     </script>
 </body>
 </html>
-
-
-
