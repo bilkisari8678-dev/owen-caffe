@@ -3,80 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Owen Caffe</title>
+    <title>Admin Panel - Owen Caffe Grouping</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     
     <style>
-        body {
-            background: #0a0a0a;
-            color: white;
-            font-family: 'Segoe UI', sans-serif;
-            padding: 20px;
-        }
+        body { background: #0a0a0a; color: white; font-family: 'Segoe UI', sans-serif; padding: 20px; }
         h1 { color: #00ffff; text-align: center; text-shadow: 0 0 10px #00ffff; }
         
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background: #111;
+        /* Container untuk setiap grup pemesan */
+        .order-group {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #00ffff;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.1);
         }
-        
-        /* Header tabel berwarna Cyan sesuai gambar */
-        .admin-table th {
+
+        /* Header Grup (Nama & Asal) */
+        .group-header {
             background: #00ffff;
             color: black;
-            padding: 12px;
-            text-align: left;
-            text-transform: uppercase;
-            font-size: 14px;
-        }
-        
-        .admin-table td {
-            padding: 12px;
-            border-bottom: 1px solid #222;
-            font-size: 14px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        /* Styling Nama Asal agar menonjol */
-        .origin-text {
-            color: #ffea00;
-            font-weight: bold;
-            display: block;
-            font-size: 12px;
+        .name-box b { font-size: 1.2rem; text-transform: uppercase; }
+        .origin-label { display: block; font-size: 0.8rem; font-weight: bold; opacity: 0.8; }
+
+        /* Isi Pesanan */
+        .group-content { padding: 15px; }
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
         }
 
-        .btn-selesai {
-            background: #ff4444;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
+        .group-footer {
+            background: rgba(0, 255, 255, 0.05);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px dashed #00ffff;
         }
 
-        .btn-selesai:hover { background: #cc0000; }
+        .total-amount { color: #00ffff; font-weight: bold; font-size: 1.2rem; }
+
+        .btn-finish {
+            background: #ff4444; color: white; border: none; padding: 10px 20px;
+            border-radius: 6px; cursor: pointer; font-weight: bold;
+        }
+        .btn-finish:hover { background: #cc0000; }
     </style>
 </head>
 <body>
 
-    <h1>🛠️ MONITORING PESANAN - ADMIN</h1>
-
-    <table class="admin-table">
-        <thead>
-            <tr>
-                <th>Waktu</th>
-                <th>Pemesan & Asal</th> <th>Produk</th>
-                <th>Qty</th>
-                <th>Total</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody id="orderTableBody">
-            </tbody>
-    </table>
+    <h1>📊 MONITORING GRUP PESANAN</h1>
+    <div id="displayArea">
+        <p style="text-align: center; color: #888;">Menunggu pesanan baru...</p>
+    </div>
 
     <script>
         const firebaseConfig = {
@@ -91,36 +81,68 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // Mendengarkan data pesanan secara real-time
         database.ref('pesanan/').on('value', (snapshot) => {
             const data = snapshot.val();
-            const tableBody = document.getElementById('orderTableBody');
-            tableBody.innerHTML = "";
+            const displayArea = document.getElementById('displayArea');
+            displayArea.innerHTML = "";
             
             if (data) {
-                Object.keys(data).reverse().forEach((key) => {
-                    const p = data[key];
-                    tableBody.innerHTML += `
-                        <tr>
-                            <td>${p.waktu || '-'}</td>
-                            <td>
-                                <b>${p.nama}</b>
-                                <span class="origin-text">📍 ${p.asal || 'Tanpa Asal'}</span> </td>
-                            <td>${p.produk}</td>
-                            <td>${p.jumlah}</td>
-                            <td>B ${p.totalHarga}</td>
-                            <td><button class="btn-selesai" onclick="hapusPesanan('${key}')">Selesai</button></td>
-                        </tr>
+                const groupedData = {};
+
+                // Kelompokkan data berdasarkan Nama Pemesan
+                Object.keys(data).forEach((id) => {
+                    const p = data[id];
+                    if (!groupedData[p.nama]) {
+                        groupedData[p.nama] = {
+                            asal: p.asal,
+                            items: [],
+                            grandTotal: 0,
+                            keys: []
+                        };
+                    }
+                    groupedData[p.nama].items.push({ nama: p.produk, qty: p.jumlah, sub: p.totalHarga });
+                    groupedData[p.nama].grandTotal += p.totalHarga;
+                    groupedData[p.nama].keys.push(id);
+                });
+
+                // Render ke layar
+                Object.keys(groupedData).reverse().forEach((nama) => {
+                    const g = groupedData[nama];
+                    let listItems = "";
+                    g.items.forEach(item => {
+                        listItems += `
+                            <div class="item-row">
+                                <span>${item.nama} <b>(x${item.qty})</b></span>
+                                <span>B ${item.sub}</span>
+                            </div>`;
+                    });
+
+                    displayArea.innerHTML += `
+                        <div class="order-group">
+                            <div class="group-header">
+                                <div class="name-box">
+                                    <b>${nama}</b>
+                                    <span class="origin-label">📍 ASAL: ${g.asal}</span>
+                                </div>
+                                <span>${g.items.length} Item</span>
+                            </div>
+                            <div class="group-content">${listItems}</div>
+                            <div class="group-footer">
+                                <div>Total: <span class="total-amount">B ${g.grandTotal}</span></div>
+                                <button class="btn-finish" onclick="hapusGrup('${g.keys.join(',')}')">SELESAI</button>
+                            </div>
+                        </div>
                     `;
                 });
             } else {
-                tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Belum ada pesanan masuk.</td></tr>';
+                displayArea.innerHTML = '<p style="text-align: center; color: #888;">Antrean kosong.</p>';
             }
         });
 
-        function hapusPesanan(key) {
-            if(confirm("Tandai pesanan ini sebagai selesai?")) {
-                database.ref('pesanan/' + key).remove();
+        function hapusGrup(keysString) {
+            if(confirm("Hapus semua pesanan untuk nama ini?")) {
+                const keys = keysString.split(',');
+                keys.forEach(k => database.ref('pesanan/' + k).remove());
             }
         }
     </script>
