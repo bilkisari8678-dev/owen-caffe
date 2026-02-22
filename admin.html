@@ -135,22 +135,22 @@
 
                 Object.keys(data).forEach((id) => {
                     const p = data[id];
-                    const asal = p.asal || "Tanpa Asal";
-                    if (!totalsByOrigin[asal]) {
-                        totalsByOrigin[asal] = { produk: {}, pembeli: [], ids: [] };
+                    const SITUS = p.SITUS || "Tanpa SITUS";
+                    if (!totalsByOrigin[SITUS]) {
+                        totalsByOrigin[SITUS] = { produk: {}, pembeli: [], ids: [] };
                     }
-                    if (!totalsByOrigin[asal].produk[p.produk]) {
-                        totalsByOrigin[asal].produk[p.produk] = 0;
+                    if (!totalsByOrigin[SITUS].produk[p.produk]) {
+                        totalsByOrigin[SITUS].produk[p.produk] = 0;
                     }
-                    totalsByOrigin[asal].produk[p.produk] += parseInt(p.jumlah);
-                    if (!totalsByOrigin[asal].pembeli.includes(p.nama)) {
-                        totalsByOrigin[asal].pembeli.push(p.nama);
+                    totalsByOrigin[SITUS].produk[p.produk] += parseInt(p.jumlah);
+                    if (!totalsByOrigin[SITUS].pembeli.includes(p.nama)) {
+                        totalsByOrigin[SITUS].pembeli.push(p.nama);
                     }
-                    totalsByOrigin[asal].ids.push(id);
+                    totalsByOrigin[SITUS].ids.push(id);
                 });
 
-                Object.keys(totalsByOrigin).forEach((asal) => {
-                    const group = totalsByOrigin[asal];
+                Object.keys(totalsByOrigin).forEach((SITUS) => {
+                    const group = totalsByOrigin[SITUS];
                     let productHtml = "";
                     for (const [namaProduk, totalQty] of Object.entries(group.produk)) {
                         productHtml += `
@@ -163,13 +163,13 @@
                     display.innerHTML += `
                         <div class="origin-group">
                             <div class="origin-header">
-                                <span>📍 ${asal}</span>
+                                <span>📍 ${SITUS}</span>
                                 <span>${group.pembeli.length} Orang</span>
                             </div>
                             <div class="origin-content">
                                 ${productHtml}
                                 <div class="customer-list">👤 Pembeli: ${group.pembeli.join(', ')}</div>
-                                <button class="btn-clear" onclick="hapusAsal('${group.ids.join(',')}', '${asal}')">HAPUS DATA ${asal}</button>
+                                <button class="btn-clear" onclick="hapusSITUS('${group.ids.join(',')}', '${SITUS}')">HAPUS DATA ${SITUS}</button>
                             </div>
                         </div>`;
                 });
@@ -178,8 +178,8 @@
             }
         });
 
-        function hapusAsal(idsString, asal) {
-            if(confirm("Hapus rekap asal " + asal + "?")) {
+        function hapusSITUS(idsString, SITUS) {
+            if(confirm("Hapus rekap SITUS " + SITUS + "?")) {
                 const ids = idsString.split(',');
                 ids.forEach(id => database.ref('pesanan/' + id).remove());
             }
