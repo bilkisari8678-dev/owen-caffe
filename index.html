@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owen Caffe - Menu Utama</title>
+    <title>Owen Caffe - Menu & Asal Pesanan</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     
@@ -23,20 +23,24 @@
         .header { text-align: center; padding: 30px 20px; }
         .header h1 { font-size: 2.5rem; color: #00ffff; text-shadow: 0 0 10px #00ffff; margin: 0; }
 
-        .order-form { text-align: center; margin-bottom: 20px; }
-        input[type="text"] {
-            padding: 12px; width: 80%; max-width: 400px; border-radius: 25px;
-            border: 2px solid #00ffff; background: rgba(0, 0, 0, 0.5); color: white; text-align: center; outline: none;
+        .order-form { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+        }
+        
+        input[type="text"], select {
+            padding: 12px; width: 85%; max-width: 400px; border-radius: 25px;
+            border: 2px solid #00ffff; background: rgba(0, 0, 0, 0.7); color: white; text-align: center; outline: none;
+            font-size: 16px;
         }
 
-        /* Container Produk agar gambar terlihat rapi */
+        select option { background: #1a1a1a; color: white; }
+
         .product-container { 
-            display: flex; 
-            flex-wrap: wrap; 
-            justify-content: center; 
-            gap: 20px; 
-            padding: 20px 10px; 
-            min-height: 400px; /* Memastikan ruang untuk produk tersedia */
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px 10px; 
         }
         
         .product-card {
@@ -50,7 +54,6 @@
         .stok-info { font-size: 13px; color: #ffea00; margin-bottom: 10px; font-weight: bold; }
         .price { font-weight: bold; color: #00ffff; margin-bottom: 15px; }
 
-        /* Kotak Pesanan & Antrean */
         .order-box {
             background: rgba(0, 255, 255, 0.1); border: 2px solid #00ffff;
             border-radius: 15px; padding: 15px; margin: 20px auto; width: 90%; max-width: 500px; backdrop-filter: blur(5px);
@@ -67,7 +70,8 @@
         }
 
         button:disabled { background: #444 !important; color: #888 !important; cursor: not-allowed; }
-        .order-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); font-size: 14px; }
+        .order-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); font-size: 13px; }
+        .origin-tag { color: #ffea00; font-style: italic; font-size: 11px; display: block; }
     </style>
 </head>
 <body>
@@ -77,7 +81,58 @@
     </div>
 
     <div class="order-form">
-        <input type="text" id="namaPemesan" placeholder="Ketik Nama Anda untuk Pesan..." oninput="pantauPesananSaya()">
+        <input type="text" id="namaPemesan" placeholder="Ketik Nama Anda..." oninput="pantauPesananSaya()">
+        
+        <select id="asalPemesan">
+            <option value="" disabled selected>-- Pilih Asal Pesanan --</option>
+            <option value="LINETOGEL">LINETOGEL</option>
+            <option value="GENGTOTO">GENGTOTO</option>
+            <option value="TOGELUP">TOGELUP</option>
+            <option value="GOL">GOL</option>
+            <option value="DDT">DDT</option>
+            <option value="HOMETOGEL">HOMETOGEL</option>
+            <option value="JONI">JONI</option>
+            <option value="UDIN">UDIN</option>
+            <option value="INDRABET">INDRABET</option>
+            <option value="INDRATOGEL">INDRATOGEL</option>
+            <option value="FIATOGEL">FIATOGEL</option>
+            <option value="PATIH TOTO">PATIH TOTO</option>
+            <option value="OPPA TOTO">OPPA TOTO</option>
+            <option value="TOGEL ON">TOGEL ON</option>
+            <option value="YOK TOGEL">YOK TOGEL</option>
+            <option value="YOWESTOGEL">YOWESTOGEL</option>
+            <option value="LUNA">LUNA</option>
+            <option value="PRO TOGEL">PRO TOGEL</option>
+            <option value="PWVIP4D">PWVIP4D</option>
+            <option value="MARIA TOGEL">MARIA TOGEL</option>
+            <option value="ZIATOGEL">ZIATOGEL</option>
+            <option value="DANATOTO">DANATOTO</option>
+            <option value="PARTAITOGEL">PARTAITOGEL</option>
+            <option value="SITUSTOTO">SITUSTOTO</option>
+            <option value="NANASTOTO">NANASTOTO</option>
+            <option value="WDBOS">WDBOS</option>
+            <option value="BosJoko">BosJoko</option>
+            <option value="JUTAWAN BET">JUTAWAN BET</option>
+            <option value="LATOTO">LATOTO</option>
+            <option value="MANCING DUIT">MANCING DUIT</option>
+            <option value="DEPOBOS">DEPOBOS</option>
+            <option value="TVTOTO">TVTOTO</option>
+            <option value="PULITOTO">PULITOTO</option>
+            <option value="WATITOTO">WATITOTO</option>
+            <option value="ANGKABET167">ANGKABET167</option>
+            <option value="FATCAI99">FATCAI99</option>
+            <option value="NAKBON99">NAKBON99</option>
+            <option value="UDOY88">UDOY88</option>
+            <option value="TOPANBOS88">TOPANBOS88</option>
+            <option value="MONGGOWIN88">MONGGOWIN88</option>
+            <option value="RUANGWD">RUANGWD</option>
+            <option value="TOPWD">TOPWD</option>
+            <option value="HOKIJITU">HOKIJITU</option>
+            <option value="BANDAR80">BANDAR80</option>
+            <option value="LAPAK99">LAPAK99</option>
+            <option value="JUARA88">JUARA88</option>
+            <option value="LIGABANDOT">LIGABANDOT</option>
+        </select>
     </div>
 
     <div class="order-box" id="boxPesananSaya" style="display: none;">
@@ -86,8 +141,7 @@
         <div id="totalBayarSaya" style="text-align: right; margin-top: 10px; font-weight: bold; color: #00ffff;"></div>
     </div>
 
-    <div class="product-container" id="menu-container">
-        </div>
+    <div class="product-container" id="menu-container"></div>
 
     <div class="order-box">
         <h3 style="text-align:center; color:#00ffff; margin:0 0 10px 0;">👥 ANTREAN PESANAN</h3>
@@ -109,19 +163,10 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // Data Produk Awal
-        const produkAwal = {
-            "p1": { nama: "SUSU KEDELAI", harga: 50, stok: 10, img: "https://down-id.img.susercontent.com/file/b2259a1c15492387e14a0ccfac4fae44" },
-            "p2": { nama: "PEACH GUM", harga: 50, stok: 10, img: "https://img06.weeecdn.com/item/image/071/142/33FADE5517F5CB2E.jpeg!c750x0.jpeg" },
-            "p3": { nama: "MATCHA", harga: 50, stok: 10, img: "https://i.pinimg.com/736x/72/03/e6/7203e6b32cf67f664055445ed06cee44.jpg" },
-            "p4": { nama: "KOPI KOKTONG", harga: 50, stok: 10, img: "https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/31ab0769-5603-4e27-88eb-36c8f5828edd_cd05a52f-e51f-473c-a1ff-e54bbb79760e_Go-Biz_20200420_184718.jpeg?auto=format" },
-            "p5": { nama: "MILK TEA", harga: 50, stok: 10, img: "https://img-global.cpcdn.com/recipes/d905d7c13a69f100/680x781cq80/thai-tea-foto-resep-utama.jpg" }
-        };
-
-        // Muat Produk Real-time
+        // Muat Menu
         database.ref('stok_produk/').on('value', (snapshot) => {
             const data = snapshot.val();
-            if (!data) { database.ref('stok_produk/').set(produkAwal); return; }
+            if (!data) return;
             const container = document.getElementById('menu-container');
             container.innerHTML = "";
             Object.keys(data).forEach((id) => {
@@ -141,7 +186,7 @@
             });
         });
 
-        // Muat Antrean Publik
+        // Muat Antrean Real-time
         database.ref('pesanan/').limitToLast(10).on('value', (snapshot) => {
             const data = snapshot.val();
             const listPublik = document.getElementById('listPemesanPublik');
@@ -149,19 +194,36 @@
             if (data) {
                 Object.keys(data).reverse().forEach((key) => {
                     const p = data[key];
-                    listPublik.innerHTML += `<div class="order-row"><span style="color:#00ffff;"><b>${p.nama}</b></span><span>${p.produk} (x${p.jumlah})</span></div>`;
+                    listPublik.innerHTML += `
+                        <div class="order-row">
+                            <div>
+                                <span style="color:#00ffff;"><b>${p.nama}</b></span>
+                                <span class="origin-tag">📍 ${p.asal || 'Tanpa Keterangan'}</span>
+                            </div>
+                            <span style="text-align:right;">${p.produk} (x${p.jumlah})</span>
+                        </div>`;
                 });
-            } else { listPublik.innerHTML = '<p style="text-align:center; color:#888;">Belum ada pesanan.</p>'; }
+            }
         });
 
         function pesanSekarang(id, namaProduk, harga, stokTersedia) {
             const namaUser = document.getElementById('namaPemesan').value.trim();
+            const asalUser = document.getElementById('asalPemesan').value;
             const qtyInput = document.getElementById('qty_' + id);
             const qty = parseInt(qtyInput.value);
-            if (!namaUser) { alert("Isi nama kamu dulu!"); return; }
+
+            if (!namaUser || !asalUser) { alert("Isi Nama dan Pilih Asal dulu!"); return; }
             if (qty > stokTersedia) { alert("Stok tidak cukup!"); return; }
+
             database.ref('stok_produk/' + id).update({ stok: stokTersedia - qty });
-            database.ref('pesanan/').push({ nama: namaUser, produk: namaProduk, jumlah: qty, totalHarga: harga * qty, waktu: new Date().toLocaleTimeString() });
+            database.ref('pesanan/').push({ 
+                nama: namaUser, 
+                asal: asalUser, 
+                produk: namaProduk, 
+                jumlah: qty, 
+                totalHarga: harga * qty, 
+                waktu: new Date().toLocaleTimeString() 
+            });
             qtyInput.value = 1;
         }
 
