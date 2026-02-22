@@ -3,37 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owen Caffe - Order Menu</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Owen Caffe - Menu Tropis</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    
     <style>
-        /* Styling Kotak List Pesanan Pelanggan */
+        body {
+            /* Background Hutan Tropis dengan efek gelap agar teks terbaca jelas */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                              url('https://img.freepik.com/foto-premium/hutan-tropis-yang-lebat-di-asia-tenggara_480416-50.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            margin: 0;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            padding-bottom: 50px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #00ffff;
+            margin: 0;
+        }
+
+        .order-form {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            padding: 12px;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 25px;
+            border: 2px solid #00ffff;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+            outline: none;
+        }
+
+        /* Kotak Riwayat Pesanan Pelanggan */
         .user-order-list {
-            background: rgba(0, 255, 255, 0.05);
+            background: rgba(0, 255, 255, 0.1);
             border: 2px solid #00ffff;
             border-radius: 15px;
             padding: 15px;
-            margin: 20px auto;
+            margin: 0 auto 30px;
             width: 90%;
-            max-width: 600px;
-            color: white;
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+            max-width: 500px;
+            backdrop-filter: blur(5px);
         }
+
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 0 10px;
+        }
+
+        .product-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ffff;
+            border-radius: 15px;
+            width: 180px;
+            padding: 15px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px #00ffff;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .product-card h3 {
+            font-size: 14px;
+            margin: 10px 0;
+            color: #00ffff;
+        }
+
+        .price {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .quantity {
+            width: 50px;
+            padding: 5px;
+            border-radius: 5px;
+            border: none;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        button {
+            background: #00ffff;
+            color: black;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+
         .order-row {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
-            font-size: 15px;
-        }
-        .total-info {
-            text-align: right;
-            margin-top: 15px;
-            font-weight: bold;
-            color: #00ffff;
-            font-size: 18px;
-            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 13px;
         }
     </style>
 </head>
@@ -48,9 +144,9 @@
     </div>
 
     <div class="user-order-list" id="boxPesananSaya" style="display: none;">
-        <h3 style="margin-top: 0; color: #00ffff; text-align: center; letter-spacing: 2px;">🛒 PESANAN SAYA</h3>
+        <h3 style="margin-top: 0; color: #00ffff; text-align: center; font-size: 16px;">🛒 PESANAN SAYA</h3>
         <div id="daftarPesanan"></div>
-        <div class="total-info" id="totalBayarSaya"></div>
+        <div id="totalBayarSaya" style="text-align: right; margin-top: 10px; font-weight: bold; color: #00ffff;"></div>
     </div>
 
     <div class="product-container">
@@ -96,7 +192,7 @@
     </div>
 
     <script>
-        // Config Firebase milik Owen Caffe
+        // Config Firebase kamu
         const firebaseConfig = {
             apiKey: "AIzaSyD8d5HgUxJhU3qy5qsb-j2TwFWam-ASjuI",
             authDomain: "owen-caffe.firebaseapp.com",
@@ -116,12 +212,8 @@
             const qty = parseInt(qtyInput.value);
             const produk = qtyInput.parentElement.querySelector('h3').innerText;
 
-            if (nama === "") { 
-                alert("Mohon isi nama anda terlebih dahulu!"); 
-                return; 
-            }
+            if (nama === "") { alert("Mohon isi nama dulu!"); return; }
 
-            // Simpan ke Realtime Database
             database.ref('pesanan/').push({
                 nama: nama,
                 produk: produk,
@@ -134,17 +226,13 @@
             });
         }
 
-        // Fungsi menampilkan list pesanan khusus nama pelanggan tersebut
         function pantauPesananSaya() {
             const nama = document.getElementById('namaPemesan').value.trim();
             const box = document.getElementById('boxPesananSaya');
             const daftar = document.getElementById('daftarPesanan');
             const totalInfo = document.getElementById('totalBayarSaya');
 
-            if (nama.length < 2) {
-                box.style.display = 'none';
-                return;
-            }
+            if (nama.length < 2) { box.style.display = 'none'; return; }
 
             database.ref('pesanan/').orderByChild('nama').equalTo(nama).on('value', (snapshot) => {
                 const data = snapshot.val();
@@ -159,11 +247,11 @@
                         daftar.innerHTML += `
                             <div class="order-row">
                                 <span>${item.produk} (x${item.jumlah})</span>
-                                <span style="color: #00ffff;">B ${item.totalHarga.toLocaleString()}</span>
+                                <span>B ${item.totalHarga}</span>
                             </div>
                         `;
                     });
-                    totalInfo.innerText = "Total Tagihan: B " + totalSemua.toLocaleString();
+                    totalInfo.innerText = "Total: B " + totalSemua;
                 } else {
                     box.style.display = 'none';
                 }
@@ -172,4 +260,3 @@
     </script>
 </body>
 </html>
-
