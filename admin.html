@@ -3,60 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Total Per Asal</title>
+    <title>Admin Recap - Owen Caffe</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     
     <style>
-        body { background: #0a0a0a; color: white; font-family: 'Segoe UI', sans-serif; padding: 20px; }
-        h1 { color: #00ffff; text-align: center; text-shadow: 0 0 10px #00ffff; }
+        body {
+            /* Menggunakan background animasi Zen Koi */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                              url('https://i.pinimg.com/originals/7e/6a/d0/7e6ad031952e85873911f4d36006e877.gif');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            padding: 20px;
+            margin: 0;
+        }
+
+        h1 { 
+            color: #00ffff; 
+            text-align: center; 
+            text-shadow: 0 0 15px #00ffff; 
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
         
+        /* Container Rekap Per Asal */
         .origin-group {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid #00ffff;
-            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.8); /* Gelap transparan agar kontras dengan background */
+            border: 1px solid #00ffff;
+            border-radius: 15px;
             margin-bottom: 25px;
             overflow: hidden;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 8px 32px rgba(0, 255, 255, 0.2);
         }
 
         .origin-header {
-            background: #00ffff;
+            background: rgba(0, 255, 255, 0.9);
             color: black;
             padding: 12px 20px;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             display: flex;
             justify-content: space-between;
         }
 
-        .origin-content { padding: 15px; }
+        .origin-content { padding: 20px; }
         
         .product-summary {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
+            padding: 10px 0;
             border-bottom: 1px solid rgba(0, 255, 255, 0.2);
             font-size: 1.1rem;
         }
 
+        .product-summary span { color: #00ffff; }
+
         .customer-list {
-            font-size: 0.8rem;
-            color: #888;
-            margin-top: 10px;
-            font-style: italic;
+            font-size: 0.9rem;
+            color: #ffea00;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
         }
 
         .btn-clear {
-            background: #ff4444; color: white; border: none; padding: 10px 20px;
-            border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px;
+            background: #ff4444; 
+            color: white; 
+            border: none; 
+            padding: 12px;
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            width: 100%; 
+            transition: 0.3s;
         }
+
+        .btn-clear:hover { background: #b30000; transform: scale(1.01); }
     </style>
 </head>
 <body>
 
-    <h1>📊 REKAP TOTAL PER ASAL (GOL, DLL)</h1>
-    <div id="originDisplay">
-        <p style="text-align: center; color: #888;">Menunggu data pesanan...</p>
+    <h1>📊 REKAP TOTAL PER ASAL</h1>
+    
+    <div id="originDisplay" style="max-width: 800px; margin: 0 auto;">
+        <p style="text-align: center; color: #888;">Menghubungkan ke kolam pesanan...</p>
     </div>
 
     <script>
@@ -80,7 +115,7 @@
             if (data) {
                 const totalsByOrigin = {};
 
-                // Proses hitung total per asal
+                // Proses hitung total per asal (Contoh: GOL)
                 Object.keys(data).forEach((id) => {
                     const p = data[id];
                     const asal = p.asal || "Tanpa Asal";
@@ -93,20 +128,18 @@
                         };
                     }
 
-                    // Tambahkan Qty produk
                     if (!totalsByOrigin[asal].produk[p.produk]) {
                         totalsByOrigin[asal].produk[p.produk] = 0;
                     }
                     totalsByOrigin[asal].produk[p.produk] += parseInt(p.jumlah);
                     
-                    // Catat nama pembeli untuk referensi
                     if (!totalsByOrigin[asal].pembeli.includes(p.nama)) {
                         totalsByOrigin[asal].pembeli.push(p.nama);
                     }
                     totalsByOrigin[asal].ids.push(id);
                 });
 
-                // Tampilkan hasil
+                // Tampilkan hasil grup
                 Object.keys(totalsByOrigin).forEach((asal) => {
                     const group = totalsByOrigin[asal];
                     let productHtml = "";
@@ -114,8 +147,8 @@
                     for (const [namaProduk, totalQty] of Object.entries(group.produk)) {
                         productHtml += `
                             <div class="product-summary">
-                                <span>✅ ${namaProduk}</span>
-                                <b>TOTAL: ${totalQty}</b>
+                                <span>🥤 ${namaProduk}</span>
+                                <b>${totalQty} PCS</b>
                             </div>`;
                     }
 
@@ -127,19 +160,19 @@
                             </div>
                             <div class="origin-content">
                                 ${productHtml}
-                                <div class="customer-list">Pembeli: ${group.pembeli.join(', ')}</div>
-                                <button class="btn-clear" onclick="hapusAsal('${group.ids.join(',')}')">HAPUS REKAP ${asal}</button>
+                                <div class="customer-list">👤 Pembeli: ${group.pembeli.join(', ')}</div>
+                                <button class="btn-clear" onclick="hapusAsal('${group.ids.join(',')}')">HAPUS DATA ${asal}</button>
                             </div>
                         </div>
                     `;
                 });
             } else {
-                display.innerHTML = '<p style="text-align: center; color: #888;">Tidak ada pesanan masuk.</p>';
+                display.innerHTML = '<p style="text-align: center; color: #888; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 10px;">Antrean kosong. Menunggu ikan koi membawa kabar...</p>';
             }
         });
 
         function hapusAsal(idsString) {
-            if(confirm("Hapus semua pesanan dari grup ini?")) {
+            if(confirm("Apakah pesanan untuk grup ini sudah selesai dikirim?")) {
                 const ids = idsString.split(',');
                 ids.forEach(id => database.ref('pesanan/' + id).remove());
             }
