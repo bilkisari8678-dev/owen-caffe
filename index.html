@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owen Caffe - Stok Terupdate</title>
+    <title>Owen Caffe - Menu dengan Qty</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     
@@ -28,7 +28,15 @@
             width: 220px; padding: 15px; text-align: center;
         }
         .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; }
-        .price { font-weight: bold; color: #00ffff; margin: 15px 0; font-size: 1.1rem; }
+        .price { font-weight: bold; color: #00ffff; margin: 15px 0 10px 0; font-size: 1.1rem; }
+        
+        /* Gaya Kolom Tambah Pesanan (Qty) */
+        .qty-input {
+            width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #00ffff;
+            background: white; color: black; text-align: center; box-sizing: border-box; 
+            font-size: 16px; margin-bottom: 10px; font-weight: bold;
+        }
+
         .order-box {
             background: rgba(0, 255, 255, 0.1); border: 2px solid #00ffff;
             border-radius: 15px; padding: 15px; margin: 20px auto; width: 90%; max-width: 600px; backdrop-filter: blur(10px);
@@ -43,34 +51,13 @@
     <div class="header"><h1>✨ OWEN CAFFE ✨</h1></div>
 
     <div class="order-form">
-        <input type="text" id="namaPemesan" placeholder="Ketik Nama Anda..." oninput="pantauPesananSaya()">
+        <input type="text" id="namaPemesan" placeholder="Ketik Nama Anda...">
         <select id="asalPemesan">
             <option value="" disabled selected>-- Pilih Asal Pesanan --</option>
-            <option value="LINETOGEL">LINETOGEL</option><option value="GENGTOTO">GENGTOTO</option>
-            <option value="TOGELUP">TOGELUP</option><option value="GOL">GOL</option>
-            <option value="DDT">DDT</option><option value="HOMETOGEL">HOMETOGEL</option>
-            <option value="JONI">JONI</option><option value="UDIN">UDIN</option>
-            <option value="INDRABET">INDRABET</option><option value="INDRATOGEL">INDRATOGEL</option>
-            <option value="FIATOGEL">FIATOGEL</option><option value="PATIH TOTO">PATIH TOTO</option>
-            <option value="OPPA TOTO">OPPA TOTO</option><option value="TOGEL ON">TOGEL ON</option>
-            <option value="YOK TOGEL">YOK TOGEL</option><option value="YOWESTOGEL">YOWESTOGEL</option>
-            <option value="LUNA">LUNA</option><option value="PRO TOGEL">PRO TOGEL</option>
-            <option value="PWVIP4D">PWVIP4D</option><option value="MARIA TOGEL">MARIA TOGEL</option>
-            <option value="ZIATOGEL">ZIATOGEL</option><option value="DANATOTO">DANATOTO</option>
-            <option value="PARTAITOGEL">PARTAITOGEL</option><option value="SITUSTOTO">SITUSTOTO</option>
-            <option value="NANASTOTO">NANASTOTO</option><option value="WDBOS">WDBOS</option>
-            <option value="BosJoko">BosJoko</option><option value="JUTAWAN BET">JUTAWAN BET</option>
-            <option value="LATOTO">LATOTO</option><option value="MANCING DUIT">MANCING DUIT</option>
-            <option value="DEPOBOS">DEPOBOS</option><option value="TVTOTO">TVTOTO</option>
-            <option value="PULITOTO">PULITOTO</option><option value="WATITOTO">WATITOTO</option>
-            <option value="ANGKABET167">ANGKABET167</option><option value="FATCAI99">FATCAI99</option>
-            <option value="NAKBON99">NAKBON99</option><option value="UDOY88">UDOY88</option>
-            <option value="TOPANBOS88">TOPANBOS88</option><option value="MONGGOWIN88">MONGGOWIN88</option>
-            <option value="RUANGWD">RUANGWD</option><option value="TOPWD">TOPWD</option>
-            <option value="HOKIJITU">HOKIJITU</option><option value="BANDAR80">BANDAR80</option>
-            <option value="LAPAK99">LAPAK99</option><option value="JUARA88">JUARA88</option>
-            <option value="LIGABANDOT">LIGABANDOT</option>
-        </select>
+            <option value="LINETOGEL">LINETOGEL</option>
+            <option value="GENGTOTO">GENGTOTO</option>
+            <option value="PARTAITOGEL">PARTAITOGEL</option>
+            </select>
     </div>
 
     <div class="product-container" id="menu-container"></div>
@@ -93,17 +80,6 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // PAKSA RESET STOK KE 1000
-        const updateKe1000 = {
-            "p1": { nama: "SUSU KEDELAI", harga: 50, stok: 1000, img: "https://down-id.img.susercontent.com/file/b2259a1c15492387e14a0ccfac4fae44" },
-            "p2": { nama: "PEACH GUM", harga: 50, stok: 1000, img: "https://img06.weeecdn.com/item/image/071/142/33FADE5517F5CB2E.jpeg!c750x0.jpeg" },
-            "p3": { nama: "MATCHA", harga: 50, stok: 1000, img: "https://i.pinimg.com/736x/72/03/e6/7203e6b32cf67f664055445ed06cee44.jpg" },
-            "p4": { nama: "KOPI KOKTONG", harga: 50, stok: 1000, img: "https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/31ab0769-5603-4e27-88eb-36c8f5828edd_cd05a52f-e51f-473c-a1ff-e54bbb79760e_Go-Biz_20200420_184718.jpeg?auto=format" },
-            "p5": { nama: "MILK TEA", harga: 50, stok: 1000, img: "https://img-global.cpcdn.com/recipes/d905d7c13a69f100/680x781cq80/thai-tea-foto-resep-utama.jpg" }
-        };
-        // Baris ini yang akan memaksa stok berubah menjadi 1000 di Firebase kamu
-        database.ref('stok_produk/').set(updateKe1000); 
-
         database.ref('stok_produk/').on('value', (snapshot) => {
             const data = snapshot.val();
             const container = document.getElementById('menu-container');
@@ -115,6 +91,7 @@
                         <img src="${item.img}" alt="${item.nama}">
                         <h3>${item.nama}</h3>
                         <div class="price">B ${item.harga}</div>
+                        <input type="number" id="qty_${id}" class="qty-input" value="1" min="1">
                         <button onclick="pesanSekarang('${id}', '${item.nama}', ${item.harga}, ${item.stok})">Tambah</button>
                     </div>`;
             });
@@ -139,13 +116,18 @@
         function pesanSekarang(id, namaProduk, harga, stokTersedia) {
             const nama = document.getElementById('namaPemesan').value.trim();
             const asal = document.getElementById('asalPemesan').value;
-            if (!nama || !asal) { alert("Isi Nama & Pilih Asal!"); return; }
+            const qty = parseInt(document.getElementById('qty_' + id).value); // Mengambil nilai dari kolom qty
             
-            database.ref('stok_produk/' + id).update({ stok: stokTersedia - 1 });
+            if (!nama || !asal) { alert("Isi Nama & Pilih Asal!"); return; }
+            if (isNaN(qty) || qty < 1) { alert("Jumlah pesanan tidak valid!"); return; }
+            
+            database.ref('stok_produk/' + id).update({ stok: stokTersedia - qty });
             database.ref('pesanan/').push({ 
-                nama: nama, asal: asal, produk: namaProduk, jumlah: 1, 
-                totalHarga: harga, waktu: new Date().toLocaleTimeString() 
+                nama: nama, asal: asal, produk: namaProduk, jumlah: qty, 
+                totalHarga: harga * qty, waktu: new Date().toLocaleTimeString() 
             });
+            
+            document.getElementById('qty_' + id).value = 1; // Reset kolom ke angka 1
         }
     </script>
 </body>
