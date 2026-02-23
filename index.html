@@ -158,16 +158,16 @@
         database.ref('pesanan/').on('value', (snapshot) => {
             const data = snapshot.val();
             const listPublik = document.getElementById('listPemesanPublik');
-            const totalDisplay = document.getElementById('totalBotolDisplay');
+            const totalDisplay = document.getElementById('totalPCSDisplay');
             
-            let totalBotolAll = 0;
+            let totalPCSAll = 0;
             listPublik.innerHTML = data ? "" : "<p style='text-align:center; padding:20px;'>Belum ada pesanan.</p>";
             
             if (data) {
                 Object.keys(data).reverse().forEach((key) => {
                     const p = data[key];
                     const jumlah = parseInt(p.jumlah) || 0;
-                    totalBotolAll += jumlah; // Tambahkan ke total botol
+                    totalPCSAll += jumlah; // Tambahkan ke total botol
 
                     listPublik.innerHTML += `
                         <div class="order-row">
@@ -180,7 +180,7 @@
                 });
             }
             // Update Teks Total Botol
-            totalDisplay.innerText = "TOTAL ORDERAN: " + totalBotolAll + " BOTOL";
+            totalDisplay.innerText = "TOTAL ORDERAN: " + totalPCSAll + " PCS";
         });
 
         function pesanSekarang(id, namaProduk, harga) {
@@ -210,3 +210,4 @@
     </script>
 </body>
 </html>
+
