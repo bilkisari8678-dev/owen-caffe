@@ -90,8 +90,8 @@
 </head>
 <body>
 
-    <div class="header"><h1>✨ OWEN CAFFE ✨</h1></div>
-    <div class="jam-info">🕒 Jam Operasional: 18:00 - 00:30 WIB</div>
+    <div class="header"><h1>✨ PANHA COFFEE by OWEN LOUIS ✨</h1></div>
+    <div class="jam-info">🕒 Jam Operasional: 18:00 - 00:00 WIB</div>
 
     <div class="order-form">
         <input type="text" id="namaPemesan" placeholder="Ketik Nama Anda..." required>
@@ -129,7 +129,7 @@
             const jam = sekarang.getHours();
             const menit = sekarang.getMinutes();
             const waktuSekarang = (jam * 100) + menit;
-            return (waktuSekarang >= 1800 || waktuSekarang < 30);
+            return (waktuSekarang >= 1800 || waktuSekarang < 0000);
         }
 
         database.ref('stok_produk/').on('value', (snapshot) => {
@@ -210,5 +210,6 @@
     </script>
 </body>
 </html>
+
 
 
