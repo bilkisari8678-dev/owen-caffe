@@ -3,114 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Recap - Grid Owen Caffe</title>
+    <title>Admin PANHA COFFEE by OWEN LOUIS - Rekap Per Situs</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     
     <style>
         body {
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            font-family: 'Segoe UI', sans-serif;
+            background-color: #0a0a0a;
             color: white;
-            /* Background Koi Biru Pilihan */
-            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
-                        url('https://i.pinimg.com/originals/3f/44/e1/3f44e122cfc5609777dba1331525c078.gif');
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
+            font-family: 'Segoe UI', sans-serif;
+            padding: 20px;
+            margin: 0;
+        }
+        h1 { text-align: center; color: #00ffff; text-shadow: 0 0 10px #00ffff; margin-bottom: 30px; }
+
+        .tanggal-group {
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 50px;
+            background: rgba(255, 255, 255, 0.02);
         }
 
-        h1 { 
-            color: #00ffff; 
-            text-align: center; 
-            text-shadow: 0 0 20px #00ffff; 
-            text-transform: uppercase;
-            margin-bottom: 40px;
+        .tanggal-label {
+            background: #ffea00;
+            color: black;
+            padding: 10px 25px;
+            display: inline-block;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
         }
 
-        /* Container Grid untuk 3 Kolom Ke Samping */
-        #originDisplay { 
-            display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3 Kolom sama besar */
-            gap: 20px; /* Jarak antar kartu */
-            max-width: 1200px;
-            margin: 0 auto;
+        .rekap-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: flex-start;
         }
 
-        /* Responsif: Menjadi 1 kolom di HP */
-        @media (max-width: 900px) {
-            #originDisplay { grid-template-columns: repeat(1, 1fr); }
-        }
-
-        /* Desain Kartu Rekap Sesuai Referensi */
-        .origin-group {
-            background: rgba(0, 0, 0, 0.85);
+        .rekap-card {
+            background: #151515;
             border: 2px solid #00ffff;
             border-radius: 12px;
+            width: 280px;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-            backdrop-filter: blur(8px);
             display: flex;
             flex-direction: column;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
-        .origin-header {
+        .rekap-header {
             background: #00ffff;
             color: black;
-            padding: 10px 15px;
+            padding: 10px;
             font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.95rem;
+            text-align: center;
+            font-size: 0.9rem;
+            text-transform: uppercase;
         }
 
-        .origin-content { padding: 15px; flex-grow: 1; }
-        
-        .product-summary {
+        .rekap-body { padding: 12px; flex-grow: 1; }
+
+        .produk-row {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+            font-weight: bold;
+            color: #00ffff;
             font-size: 0.9rem;
         }
 
-        .product-summary span { color: #00ffff; font-weight: bold; }
-
-        .customer-list {
-            font-size: 0.8rem;
-            color: #ffea00;
-            margin: 12px 0;
+        .pembeli-box {
+            margin-top: 10px;
             padding: 8px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 6px;
-            border-left: 3px solid #ffea00;
+            font-size: 0.75rem;
+            color: #ffea00;
+            line-height: 1.4;
         }
 
-        .btn-clear {
-            background: #ff4d4d; 
-            color: white; 
-            border: none; 
-            padding: 10px;
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            width: 100%; 
+        .total-situs {
+            background: rgba(0, 255, 255, 0.1);
+            color: white;
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+            border-top: 1px solid #00ffff;
+        }
+
+        /* Tombol Hapus Situs */
+        .btn-hapus-situs {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.75rem;
+            width: 100%;
             text-transform: uppercase;
-            font-size: 0.85rem;
-            transition: 0.3s;
         }
-
-        .btn-clear:hover { background: #ff1a1a; box-shadow: 0 0 10px #ff4d4d; }
+        .btn-hapus-situs:hover { background: #ff0000; }
+        
+        .btn-hapus-tgl {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
 
-    <h1>📊 REKAP PESANAN OWEN CAFFE</h1>
-    
-    <div id="originDisplay">
-        </div>
+    <h1>📊 PESANAN PANHA COFFEE by OWEN LOUIS</h1>
+    <div id="masterAdmin">
+        <p style="text-align: center;">Memuat data...</p>
+    </div>
 
     <script>
         const firebaseConfig = {
@@ -127,61 +143,102 @@
 
         database.ref('pesanan/').on('value', (snapshot) => {
             const data = snapshot.val();
-            const display = document.getElementById('originDisplay');
-            display.innerHTML = "";
-            
-            if (data) {
-                const totalsByOrigin = {};
+            const master = document.getElementById('masterAdmin');
+            master.innerHTML = "";
 
-                Object.keys(data).forEach((id) => {
-                    const p = data[id];
-                    const SITUS = p.SITUS || "Tanpa SITUS";
-                    if (!totalsByOrigin[SITUS]) {
-                        totalsByOrigin[SITUS] = { produk: {}, pembeli: [], ids: [] };
-                    }
-                    if (!totalsByOrigin[SITUS].produk[p.produk]) {
-                        totalsByOrigin[SITUS].produk[p.produk] = 0;
-                    }
-                    totalsByOrigin[SITUS].produk[p.produk] += parseInt(p.jumlah);
-                    if (!totalsByOrigin[SITUS].pembeli.includes(p.nama)) {
-                        totalsByOrigin[SITUS].pembeli.push(p.nama);
-                    }
-                    totalsByOrigin[SITUS].ids.push(id);
-                });
-
-                Object.keys(totalsByOrigin).forEach((SITUS) => {
-                    const group = totalsByOrigin[SITUS];
-                    let productHtml = "";
-                    for (const [namaProduk, totalQty] of Object.entries(group.produk)) {
-                        productHtml += `
-                            <div class="product-summary">
-                                <span>🥤 ${namaProduk}</span>
-                                <b>${totalQty} PCS</b>
-                            </div>`;
-                    }
-
-                    display.innerHTML += `
-                        <div class="origin-group">
-                            <div class="origin-header">
-                                <span>📍 ${SITUS}</span>
-                                <span>${group.pembeli.length} Orang</span>
-                            </div>
-                            <div class="origin-content">
-                                ${productHtml}
-                                <div class="customer-list">👤 Pembeli: ${group.pembeli.join(', ')}</div>
-                                <button class="btn-clear" onclick="hapusSITUS('${group.ids.join(',')}', '${SITUS}')">HAPUS DATA ${SITUS}</button>
-                            </div>
-                        </div>`;
-                });
-            } else {
-                display.innerHTML = '<div style="grid-column: span 3; text-align: center; color: #888;">Antrean kosong.</div>';
+            if (!data) {
+                master.innerHTML = "<p style='text-align:center;'>Tidak ada pesanan.</p>";
+                return;
             }
+
+            const groups = {};
+
+            Object.keys(data).forEach(id => {
+                const p = data[id];
+                const tgl = p.tanggal || "Lama";
+                const situs = p.SITUS || "LAIN-LAIN";
+
+                if (!groups[tgl]) groups[tgl] = {};
+                if (!groups[tgl][situs]) {
+                    groups[tgl][situs] = { items: {}, pembeli: [], totalQty: 0, ids: [] };
+                }
+
+                groups[tgl][situs].items[p.produk] = (groups[tgl][situs].items[p.produk] || 0) + parseInt(p.jumlah);
+                groups[tgl][situs].totalQty += parseInt(p.jumlah);
+                groups[tgl][situs].pembeli.push(`${p.nama}(${p.jumlah})`);
+                groups[tgl][situs].ids.push(id); // Simpan ID untuk dihapus
+            });
+
+            const sortedDates = Object.keys(groups).sort((a,b) => {
+                const da = a.split('-').reverse().join('');
+                const db = b.split('-').reverse().join('');
+                return db.localeCompare(da);
+            });
+
+            sortedDates.forEach(tgl => {
+                const section = document.createElement('div');
+                section.className = 'tanggal-group';
+                section.innerHTML = `
+                    <div class="tanggal-label">🗓️ ${tgl}</div>
+                    <button class="btn-hapus-tgl" onclick="hapusTanggal('${tgl}')">Hapus Semua Data Hari Ini</button>
+                `;
+                
+                const grid = document.createElement('div');
+                grid.className = 'rekap-grid';
+
+                Object.keys(groups[tgl]).sort().forEach(situs => {
+                    const info = groups[tgl][situs];
+                    let produkHtml = "";
+                    for (const [nama, qty] of Object.entries(info.items)) {
+                        produkHtml += `<div class="produk-row"><span>🥤 ${nama}</span><span>${qty}</span></div>`;
+                    }
+
+                    // Tambahkan Card Situs
+                    const card = document.createElement('div');
+                    card.className = 'rekap-card';
+                    card.innerHTML = `
+                        <div class="rekap-header">📍 ${situs}</div>
+                        <div class="rekap-body">
+                            ${produkHtml}
+                            <div class="pembeli-box"><b>Pembeli:</b><br>${info.pembeli.join(', ')}</div>
+                        </div>
+                        <div class="total-situs">Total: ${info.totalQty} Botol</div>
+                        <button class="btn-hapus-situs" onclick="hapusSitus('${tgl}', '${situs}')">Hapus Situs Ini</button>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                section.appendChild(grid);
+                master.appendChild(section);
+            });
         });
 
-        function hapusSITUS(idsString, SITUS) {
-            if(confirm("Hapus rekap SITUS " + SITUS + "?")) {
-                const ids = idsString.split(',');
-                ids.forEach(id => database.ref('pesanan/' + id).remove());
+        // FUNGSI HAPUS PER SITUS PADA TANGGAL TERTENTU
+        function hapusSitus(tgl, situs) {
+            if (confirm(`Hapus semua pesanan ${situs} pada tanggal ${tgl}?`)) {
+                database.ref('pesanan/').once('value', (snapshot) => {
+                    const data = snapshot.val();
+                    Object.keys(data).forEach(id => {
+                        const p = data[id];
+                        // Cek apakah tanggal dan situs cocok
+                        if ((p.tanggal === tgl || (!p.tanggal && tgl === "Lama")) && p.SITUS === situs) {
+                            database.ref('pesanan/' + id).remove();
+                        }
+                    });
+                });
+            }
+        }
+
+        function hapusTanggal(tgl) {
+            if (confirm(`Hapus SEMUA data tanggal ${tgl}?`)) {
+                database.ref('pesanan/').once('value', (snapshot) => {
+                    const data = snapshot.val();
+                    Object.keys(data).forEach(id => {
+                        if (data[id].tanggal === tgl || (!data[id].tanggal && tgl === "Lama")) {
+                            database.ref('pesanan/' + id).remove();
+                        }
+                    });
+                });
             }
         }
     </script>
