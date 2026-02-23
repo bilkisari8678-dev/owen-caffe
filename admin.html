@@ -14,52 +14,75 @@
             min-height: 100vh;
             font-family: 'Segoe UI', sans-serif;
             color: white;
-            /* Background Koi Biru Pilihan */
-            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
                         url('https://i.pinimg.com/originals/3f/44/e1/3f44e122cfc5609777dba1331525c078.gif');
             background-size: cover;
             background-attachment: fixed;
             background-position: center;
         }
-        h1 { text-align: center; color: #00ffff; text-shadow: 0 0 10px #00ffff; }
+
+        h1 { 
+            text-align: center; 
+            color: #00ffff; 
+            text-shadow: 0 0 15px #00ffff; 
+            text-transform: uppercase; 
+            margin-bottom: 40px; 
+            letter-spacing: 2px;
+        }
 
         .tanggal-group {
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 20px;
             padding: 25px;
             margin-bottom: 50px;
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .tanggal-label {
             background: #ffea00;
             color: black;
-            padding: 10px 25px;
+            padding: 12px 30px;
             display: inline-block;
-            border-radius: 5px;
+            border-radius: 10px;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(255, 234, 0, 0.3);
         }
 
-        /* --- SISTEM GRID 3 KOLOM KE SAMPING --- */
+        .btn-hapus-tgl {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            float: right;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        .btn-hapus-tgl:hover { background: #cc0000; transform: scale(1.05); }
+
         .rekap-grid {
             display: grid;
-            /* Membuat 3 kolom dengan lebar yang sama (1fr) */
             grid-template-columns: repeat(3, 1fr); 
-            gap: 25px; /* Jarak antar kotak */
+            gap: 25px;
+            clear: both;
         }
 
         .rekap-card {
-            background: #151515;
+            background: rgba(20, 20, 20, 0.9);
             border: 2px solid #00ffff;
-            border-radius: 12px;
+            border-radius: 15px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            height: 100%; /* Agar tinggi kotak sama dalam satu baris */
+            transition: 0.3s;
         }
+        .rekap-card:hover { border-color: #ffea00; transform: translateY(-5px); }
 
         .rekap-header {
             background: #00ffff;
@@ -68,7 +91,7 @@
             font-weight: bold;
             text-align: center;
             text-transform: uppercase;
-            font-size: 1rem;
+            font-size: 1.1rem;
         }
 
         .rekap-body { padding: 15px; flex-grow: 1; }
@@ -76,29 +99,30 @@
         .produk-row {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
             font-weight: bold;
             color: #00ffff;
         }
 
         .pembeli-box {
             margin-top: 15px;
-            padding: 10px;
+            padding: 12px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
-            font-size: 0.85rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
             color: #ffea00;
-            min-height: 50px;
+            border-left: 4px solid #ffea00;
         }
 
         .total-situs {
             background: rgba(0, 255, 255, 0.1);
             color: white;
-            padding: 10px;
+            padding: 12px;
             text-align: center;
             font-weight: bold;
             border-top: 1px solid #00ffff;
+            font-size: 1rem;
         }
 
         .btn-hapus-situs {
@@ -112,30 +136,13 @@
             text-transform: uppercase;
         }
 
-        .btn-hapus-tgl {
-            background: #444;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            float: right;
-        }
-
-        /* --- RESPONSIVE (Untuk HP/Tablet) --- */
-        /* Jika layar lebar medium (Tablet), jadi 2 kolom */
-        @media (max-width: 1100px) {
-            .rekap-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        /* Jika layar HP, jadi 1 kolom saja */
-        @media (max-width: 700px) {
-            .rekap-grid { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 1100px) { .rekap-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 750px) { .rekap-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <h1>📊 REKAP PESANAN PANHA COFFEE by OWEN LOUIS</h1>
+    <h1>📊 REKAP PESANAN PANHA COFFEE</h1>
     <div id="masterAdmin"></div>
 
     <script>
@@ -151,6 +158,18 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
+        function formatTanggalIndo(tglString) {
+            const bulanIndo = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            const part = tglString.split('-'); 
+            if (part.length !== 3) return tglString;
+            return `${parseInt(part[0])} ${bulanIndo[parseInt(part[1]) - 1]} ${part[2]}`;
+        }
+
+        function getTodayDate() {
+            const d = new Date();
+            return `${String(d.getDate()).padStart(2, '0')}-${String(d.getMonth() + 1).padStart(2, '0')}-${d.getFullYear()}`;
+        }
+
         database.ref('pesanan/').on('value', (snapshot) => {
             const data = snapshot.val();
             const master = document.getElementById('masterAdmin');
@@ -161,15 +180,22 @@
             const groups = {};
             Object.keys(data).forEach(id => {
                 const p = data[id];
-                const tgl = p.tanggal || "Lama";
+                let tglKey = p.tanggal || getTodayDate();
                 const situs = p.SITUS || "LAIN-LAIN";
-                if (!groups[tgl]) groups[tgl] = {};
-                if (!groups[tgl][situs]) {
-                    groups[tgl][situs] = { items: {}, pembeli: [], totalQty: 0 };
+                
+                if (!groups[tglKey]) groups[tglKey] = {};
+                if (!groups[tglKey][situs]) {
+                    groups[tglKey][situs] = { items: {}, pembeli: [], totalQty: 0 };
                 }
-                groups[tgl][situs].items[p.produk] = (groups[tgl][situs].items[p.produk] || 0) + parseInt(p.jumlah);
-                groups[tgl][situs].totalQty += parseInt(p.jumlah);
-                groups[tgl][situs].pembeli.push(`${p.nama}(${p.jumlah})`);
+
+                const qty = parseInt(p.jumlah) || 0;
+                groups[tglKey][situs].items[p.produk] = (groups[tglKey][situs].items[p.produk] || 0) + qty;
+                groups[tglKey][situs].totalQty += qty;
+                
+                // HANYA NAMA PEMESAN SAJA
+                if (!groups[tglKey][situs].pembeli.includes(p.nama)) {
+                    groups[tglKey][situs].pembeli.push(p.nama);
+                }
             });
 
             const sortedDates = Object.keys(groups).sort((a,b) => {
@@ -182,8 +208,8 @@
                 const section = document.createElement('div');
                 section.className = 'tanggal-group';
                 section.innerHTML = `
-                    <div class="tanggal-label">🗓️ ${tgl}</div>
-                    <button class="btn-hapus-tgl" onclick="hapusTanggal('${tgl}')">Hapus Semua Hari Ini</button>
+                    <button class="btn-hapus-tgl" onclick="hapusTanggal('${tgl}')">Hapus Hari Ini</button>
+                    <div class="tanggal-label">🗓️ ${formatTanggalIndo(tgl)}</div>
                 `;
                 
                 const grid = document.createElement('div');
@@ -193,7 +219,7 @@
                     const info = groups[tgl][situs];
                     let produkHtml = "";
                     for (const [nama, qty] of Object.entries(info.items)) {
-                        produkHtml += `<div class="produk-row"><span>🥤 ${nama}</span><span>${qty}</span></div>`;
+                        produkHtml += `<div class="produk-row"><span>🥤 ${nama}</span><span>${qty} Botol</span></div>`;
                     }
 
                     grid.innerHTML += `
@@ -201,9 +227,9 @@
                             <div class="rekap-header">📍 ${situs}</div>
                             <div class="rekap-body">
                                 ${produkHtml}
-                                <div class="pembeli-box"><b>Pembeli:</b><br>${info.pembeli.join(', ')}</div>
+                                <div class="pembeli-box"><b>Nama Pemesan:</b><br>${info.pembeli.join(', ')}</div>
                             </div>
-                            <div class="total-situs">Total: ${info.totalQty} Botol</div>
+                            <div class="total-situs">Total: ${info.totalQty} PCS</div>
                             <button class="btn-hapus-situs" onclick="hapusSitus('${tgl}', '${situs}')">Hapus Situs</button>
                         </div>`;
                 });
@@ -214,11 +240,12 @@
         });
 
         function hapusSitus(tgl, situs) {
-            if (confirm(`Hapus data ${situs} di tanggal ${tgl}?`)) {
+            if (confirm(`Hapus data ${situs} untuk tanggal ${tgl}?`)) {
                 database.ref('pesanan/').once('value', (snap) => {
                     snap.forEach((child) => {
                         const p = child.val();
-                        if ((p.tanggal === tgl || (!p.tanggal && tgl === "Lama")) && p.SITUS === situs) {
+                        const tglData = p.tanggal || getTodayDate();
+                        if (tglData === tgl && (p.SITUS === situs || (!p.SITUS && situs === "LAIN-LAIN"))) {
                             child.ref.remove();
                         }
                     });
@@ -227,11 +254,12 @@
         }
 
         function hapusTanggal(tgl) {
-            if (confirm(`Hapus SEMUA data tanggal ${tgl}?`)) {
+            if (confirm(`Hapus SEMUA data untuk tanggal ${tgl}?`)) {
                 database.ref('pesanan/').once('value', (snap) => {
                     snap.forEach((child) => {
                         const p = child.val();
-                        if (p.tanggal === tgl || (!p.tanggal && tgl === "Lama")) {
+                        const tglData = p.tanggal || getTodayDate();
+                        if (tglData === tgl) {
                             child.ref.remove();
                         }
                     });
