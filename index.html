@@ -192,7 +192,7 @@
             const jam = sekarang.getHours();
             const menit = sekarang.getMinutes();
             const waktuSkg = (jam * 100) + menit;
-            const isOpen = (waktuSkg >= 1800 || waktuSkg < 30);
+            const isOpen = (waktuSkg >= 1800 || waktuSkg < 0000);
             
             const statusLabel = document.getElementById('statusJam');
             statusLabel.innerHTML = isOpen ? "🟢 TOKO BUKA" : "🔴 TOKO TUTUP (Buka 18:00)";
@@ -272,6 +272,7 @@
     </script>
 </body>
 </html>
+
 
 
 
