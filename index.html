@@ -165,7 +165,7 @@
     <div class="order-box">
         <h3>👥 ANTREAN PESANAN TERBARU</h3>
         <div id="listPemesanPublik"></div>
-        <div id="totalBotolDisplay" class="total-summary">TOTAL ORDERAN: 0 BOTOL</div>
+        <div id="totalPCSDisplay" class="total-summary">TOTAL ORDERAN: 0 PCS</div>
     </div>
 
     <script>
@@ -222,13 +222,13 @@
         database.ref('pesanan/').on('value', (snapshot) => {
             const data = snapshot.val();
             const listPublik = document.getElementById('listPemesanPublik');
-            const totalDisplay = document.getElementById('totalBotolDisplay');
-            let totalBotolAll = 0;
+            const totalDisplay = document.getElementById('totalPCSDisplay');
+            let totalPCSAll = 0;
             listPublik.innerHTML = data ? "" : "<p style='text-align:center; padding:20px;'>Belum ada pesanan.</p>";
             if (data) {
                 Object.keys(data).reverse().forEach((key) => {
                     const p = data[key];
-                    totalBotolAll += (parseInt(p.jumlah) || 0);
+                    totalPCSAll += (parseInt(p.jumlah) || 0);
                     listPublik.innerHTML += `
                         <div class="order-row">
                             <div class="pembeli-info">
@@ -240,7 +240,7 @@
                         </div>`;
                 });
             }
-            totalDisplay.innerText = "TOTAL ORDERAN: " + totalBotolAll + " BOTOL";
+            totalDisplay.innerText = "TOTAL ORDERAN: " + totalPCSAll + " PCS";
         });
 
         function pesanSekarang(id, namaProduk, harga) {
@@ -266,6 +266,7 @@
     </script>
 </body>
 </html>
+
 
 
 
