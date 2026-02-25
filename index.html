@@ -18,6 +18,28 @@
         .header { text-align: center; padding: 30px 20px; }
         .header h1 { font-size: 2.5rem; color: #00ffff; text-shadow: 0 0 10px #00ffff; margin: 0; }
         
+        /* --- STYLE BARU UNTUK INFO PO --- */
+        .info-po {
+            background: rgba(255, 234, 0, 0.15);
+            border: 1px dashed #ffea00;
+            color: #ffea00;
+            text-align: center;
+            margin: 0 auto 20px auto;
+            padding: 15px;
+            width: 85%;
+            max-width: 500px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+
         .jam-info { 
             text-align: center; background: rgba(0, 255, 255, 0.2); 
             padding: 8px; font-size: 0.9rem; color: #00ffff; margin-bottom: 15px;
@@ -42,16 +64,15 @@
         .product-card h3 { font-size: 1.1rem; margin: 10px 0 5px 0; color: #fff; text-transform: uppercase; }
         .price { font-weight: bold; color: #00ffff; margin-bottom: 15px; font-size: 1.2rem; }
         
-        /* --- PENYELARASAN LEBAR KOLOM --- */
         .action-group {
             display: flex;
             width: 100%;
-            gap: 5px; /* Jarak tipis antar kolom */
+            gap: 5px;
             justify-content: center;
         }
 
         .qty-input {
-            width: 40%; /* Lebar kolom jumlah */
+            width: 40%;
             padding: 12px 0;
             border-radius: 8px;
             border: none;
@@ -64,7 +85,7 @@
         }
 
         .btn-tambah { 
-            width: 60%; /* Lebar tombol tambah */
+            width: 60%;
             background: #00ffff;
             color: black;
             border: none;
@@ -78,7 +99,6 @@
         }
         .btn-tambah:disabled { background: #555; color: #888; cursor: not-allowed; }
 
-        /* Area Antrean & Scroll */
         .order-box {
             background: rgba(0, 0, 0, 0.9); border: 2px solid #00ffff;
             border-radius: 15px; margin: 40px auto; width: 90%; max-width: 600px; 
@@ -101,71 +121,77 @@
 <body>
 
     <div class="header"><h1>✨ PANHA COFFEE by OWEN LOUIS ✨</h1></div>
+    
+    <div class="info-po">
+        ⚠️ <b>INFORMASI PENTING:</b><br>
+        JIKA PESAN HARI INI DATANG NYA BESOK, KARENA INI SISTEM <b>PRE-ORDER (PO)</b> BUKAN DADAKAN. TERIMA KASIH.
+    </div>
+
     <div class="jam-info" id="statusJam">🕒 Mengecek Waktu Operasional...</div>
 
     <div class="order-form">
         <input type="text" id="namaPemesan" placeholder="Ketik Nama Anda..." required>
         <select id="SITUS">
-    <option value="" disabled selected>-- Pilih SITUS --</option>
-    <option value="LINETOGEL">LINETOGEL</option>
-    <option value="GENGTOTO">GENGTOTO</option>
-    <option value="TOGELUP">TOGELUP</option>
-    <option value="GOLTOGEL">GOLTOGEL</option>
-    <option value="DDT">DDT</option>
-    <option value="HOMETOGEL">HOMETOGEL</option>
-    <option value="JONI TOGEL">JONI TOGEL</option>
-    <option value="UDINTOGEL">UDINTOGEL</option>
-    <option value="INDRABET">INDRABET</option>
-    <option value="INDRATOGEL">INDRATOGEL</option>
-    <option value="FIATOGEL">FIATOGEL</option>
-    <option value="PATIH TOTO">PATIH TOTO</option>
-    <option value="OPPA TOTO">OPPA TOTO</option>
-    <option value="TOGEL ON">TOGEL ON</option>
-    <option value="YOK TOGEL">YOK TOGEL</option>
-    <option value="YOWESTOGEL">YOWESTOGEL</option>
-    <option value="LUNATOGEL">LUNATOGEL</option>
-    <option value="PRO TOGEL">PRO TOGEL</option>
-    <option value="PWVIP4D">PWVIP4D</option>
-    <option value="MARIA TOGEL">MARIA TOGEL</option>
-    <option value="ZIATOGEL">ZIATOGEL</option>
-    <option value="DANATOTO">DANATOTO</option>
-    <option value="PARTAITOGEL">PARTAITOGEL</option>
-    <option value="SITUSTOTO">SITUSTOTO</option>
-    <option value="NANASTOTO">NANASTOTO</option>
-    <option value="WDBOS">WDBOS</option>
-    <option value="BOSJOKO">BOSJOKO</option>
-    <option value="JUTAWAN BET">JUTAWAN BET</option>
-    <option value="LATOTO">LATOTO</option>
-    <option value="MANCING DUIT">MANCING DUIT</option>
-    <option value="DEPOBOS">DEPOBOS</option>
-    <option value="TVTOTO">TVTOTO</option>
-    <option value="PULITOTO">PULITOTO</option>
-    <option value="WATITOTO">WATITOTO</option>
-    <option value="ANGKABET167">ANGKABET167</option>
-    <option value="FATCAI99">FATCAI99</option>
-    <option value="NAKBON99">NAKBON99</option>
-    <option value="UDOY88">UDOY88</option>
-    <option value="TOPANBOS88">TOPANBOS88</option>
-    <option value="MONGGOWIN88">MONGGOWIN88</option>
-    <option value="RUANGWD">RUANGWD</option>
-    <option value="TOPWD">TOPWD</option>
-    <option value="JUD0TOTO">JUD0TOTO</option>
-    <option value="HOKIJITU">HOKIJITU</option>
-    <option value="BANDAR80">BANDAR80</option>
-    <option value="LAPAK99">LAPAK99</option>
-    <option value="JUARA88">JUARA88</option>
-    <option value="LIGABANDOT">LIGABANDOT</option>
-    <option value="ARENA303">ARENA303</option>
-    <option value="WDMAHJONG">WDMAHJONG</option>
-    <option value="CITAWIN">CITAWIN</option>
-    <option value="HOKBENTOTO">HOKBENTOTO</option>
-    <option value="MARKASWD">MARKASWD</option>
-    <option value="ADM">ADM</option>
-    <option value="CRM">CRM</option>
-    <option value="AUDIT">AUDIT</option>
-    <option value="AM">AM</option>
-    <option value="TS">TS</option>
-</select>
+            <option value="" disabled selected>-- Pilih SITUS --</option>
+            <option value="LINETOGEL">LINETOGEL</option>
+            <option value="GENGTOTO">GENGTOTO</option>
+            <option value="TOGELUP">TOGELUP</option>
+            <option value="GOLTOGEL">GOLTOGEL</option>
+            <option value="DDT">DDT</option>
+            <option value="HOMETOGEL">HOMETOGEL</option>
+            <option value="JONI TOGEL">JONI TOGEL</option>
+            <option value="UDINTOGEL">UDINTOGEL</option>
+            <option value="INDRABET">INDRABET</option>
+            <option value="INDRATOGEL">INDRATOGEL</option>
+            <option value="FIATOGEL">FIATOGEL</option>
+            <option value="PATIH TOTO">PATIH TOTO</option>
+            <option value="OPPA TOTO">OPPA TOTO</option>
+            <option value="TOGEL ON">TOGEL ON</option>
+            <option value="YOK TOGEL">YOK TOGEL</option>
+            <option value="YOWESTOGEL">YOWESTOGEL</option>
+            <option value="LUNATOGEL">LUNATOGEL</option>
+            <option value="PRO TOGEL">PRO TOGEL</option>
+            <option value="PWVIP4D">PWVIP4D</option>
+            <option value="MARIA TOGEL">MARIA TOGEL</option>
+            <option value="ZIATOGEL">ZIATOGEL</option>
+            <option value="DANATOTO">DANATOTO</option>
+            <option value="PARTAITOGEL">PARTAITOGEL</option>
+            <option value="SITUSTOTO">SITUSTOTO</option>
+            <option value="NANASTOTO">NANASTOTO</option>
+            <option value="WDBOS">WDBOS</option>
+            <option value="BOSJOKO">BOSJOKO</option>
+            <option value="JUTAWAN BET">JUTAWAN BET</option>
+            <option value="LATOTO">LATOTO</option>
+            <option value="MANCING DUIT">MANCING DUIT</option>
+            <option value="DEPOBOS">DEPOBOS</option>
+            <option value="TVTOTO">TVTOTO</option>
+            <option value="PULITOTO">PULITOTO</option>
+            <option value="WATITOTO">WATITOTO</option>
+            <option value="ANGKABET167">ANGKABET167</option>
+            <option value="FATCAI99">FATCAI99</option>
+            <option value="NAKBON99">NAKBON99</option>
+            <option value="UDOY88">UDOY88</option>
+            <option value="TOPANBOS88">TOPANBOS88</option>
+            <option value="MONGGOWIN88">MONGGOWIN88</option>
+            <option value="RUANGWD">RUANGWD</option>
+            <option value="TOPWD">TOPWD</option>
+            <option value="JUD0TOTO">JUD0TOTO</option>
+            <option value="HOKIJITU">HOKIJITU</option>
+            <option value="BANDAR80">BANDAR80</option>
+            <option value="LAPAK99">LAPAK99</option>
+            <option value="JUARA88">JUARA88</option>
+            <option value="LIGABANDOT">LIGABANDOT</option>
+            <option value="ARENA303">ARENA303</option>
+            <option value="WDMAHJONG">WDMAHJONG</option>
+            <option value="CITAWIN">CITAWIN</option>
+            <option value="HOKBENTOTO">HOKBENTOTO</option>
+            <option value="MARKASWD">MARKASWD</option>
+            <option value="ADM">ADM</option>
+            <option value="CRM">CRM</option>
+            <option value="AUDIT">AUDIT</option>
+            <option value="AM">AM</option>
+            <option value="TS">TS</option>
+        </select>
     </div>
 
     <div class="product-container" id="menu-container"></div>
@@ -274,10 +300,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
