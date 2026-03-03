@@ -202,7 +202,7 @@
             const isOpen = (waktuSkg >= 0030 || waktuSkg < 0000);
             
             const statusLabel = document.getElementById('statusJam');
-            statusLabel.innerHTML = isOpen ? "🟢 TOKO BUKA" : "🔴 TOKO TUTUP (Buka 18:00)";
+            statusLabel.innerHTML = isOpen ? "🟢 TOKO BUKA" : "🔴 TOKO TUTUP (Buka 00:30)";
             statusLabel.style.color = isOpen ? "#00ffff" : "#ff4d4d";
             return isOpen;
         }
@@ -279,6 +279,7 @@
     </script>
 </body>
 </html>
+
 
 
 
